@@ -1,0 +1,37 @@
+{{ define "content" }}
+
+   
+{{ if .Books }}
+    <table border="1" class="container">
+        <tr><h2>Books List:</tr>
+        <tr>
+            <th>Book ID</th>
+            <th>Title</th>
+            <th>Description</th>
+            <th>Created By</th>
+            <th>Created At</th>
+            <th>Updated By</th>
+            <th>Updated At</th>
+        </tr>
+        {{ range .Books }}
+        <tr>
+            <td>{{ .BookID }}</td>
+            <td>{{ .Title }}</td>
+            <td>{{ .Description }}</td>
+            <td>{{ .CreatedBy }}</td>
+            <td>{{ .CreatedAt }}</td>
+            <td>{{ .UpdatedBy }}</td>
+            <td>{{ .UpdatedAt }}</td>
+        </tr>
+        {{ end }}
+    </table>
+{{ else }}
+    <p>No books found.</p>
+{{ end }}
+
+
+{{ if .Error }}
+<p style="color: red;">{{ .Error }}</p>
+{{ end }}
+
+{{ end }}

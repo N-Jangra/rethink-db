@@ -1,0 +1,26 @@
+{{ define "content" }}
+
+<form action="/books/id" method="GET">
+    <input type="number" name="id" placeholder="Enter Book ID" required>
+    <button type="submit">Get Book</button>
+</form>
+
+{{ if .Book }}
+    <h3>Book Details:</h3>
+    <table class="zz" border="1" >
+        <tr><th>Book ID</th><td>{{ .Book.BookID }}</td></tr>
+        <tr><th>Title</th><td>{{ .Book.Title }}</td></tr>
+        <tr><th>Description</th><td>{{ .Book.Description }}</td></tr>
+        <tr><th>Created By</th><td>{{ .Book.CreatedBy }}</td></tr>
+        <tr><th>Created At</th><td>{{ .Book.CreatedAt }}</td></tr>
+        <tr><th>Updated By</th><td>{{ .Book.UpdatedBy }}</td></tr>
+        <tr><th>Updated At</th><td>{{ .Book.UpdatedAt }}</td></tr>
+    </table>
+{{ else }}
+{{ end }}
+
+{{ if .Error }}
+<p style="color: red;">{{ .Error }}</p>
+{{ end }}
+
+{{ end }}

@@ -1,0 +1,30 @@
+r.db('taipan').table('roles').insert([
+  { role: "Admin", level: 1, description: "Full Access" },
+  { role: "User", level: 2, description: "Can create and edit books" },
+  { role: "Guest", level: 3, description: "Can only view books" }
+])
+
+r.db('taipan').table('privilege_category').insert([
+  { category: "Books", description: "Book-related privileges" }
+])
+
+r.db('taipan').table('privilege').insert([
+  { privilege: "book_read", category: "Books", description: "Read book details", type: "API", appid: "BookApp" },
+  { privilege: "book_create", category: "Books", description: "Create a new book", type: "API", appid: "BookApp" },
+  { privilege: "book_update", category: "Books", description: "Update a book", type: "API", appid: "BookApp" },
+  { privilege: "book_delete", category: "Books", description: "Delete a book", type: "API", appid: "BookApp" }
+])
+
+r.db('taipan').table('access').insert([
+  { privilege: "book_read", role: "Admin" },
+  { privilege: "book_read", role: "User" },
+  { privilege: "book_read", role: "Guest" },
+  { privilege: "book_create", role: "Admin" },
+  { privilege: "book_create", role: "User" },
+  { privilege: "book_update", role: "Admin" },
+  { privilege: "book_update", role: "User" },
+  { privilege: "book_delete", role: "Admin" },
+  { privilege: "book_delete", role: "User" }
+])
+
+

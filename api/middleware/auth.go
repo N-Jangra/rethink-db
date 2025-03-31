@@ -16,22 +16,27 @@ import (
 // AuthMiddleware validates JWT tokens
 func AuthMiddleware(next echo.HandlerFunc) echo.HandlerFunc {
 	return func(c echo.Context) error {
+
+		var tokenString string
 		authHeader := c.Request().Header.Get("Authorization")
 
 		// Check if the Authorization header is present
-		if authHeader == "" {
-			log.Println("Error: Authorization header missing")
-			return c.JSON(http.StatusUnauthorized, echo.Map{"error": "missing authorization token"})
+		authHeader = c.Request().Header.Get("Authorization")
+		if strings.HasPrefix(authHeader, "Bearer ") {
+			tokenString = strings.TrimPrefix(authHeader, "Bearer ")
+		} else {
+			// If not found, fallback to checking the cookie
+			cookie, err := c.Cookie("Authorization")
+			if err != nil {
+				log.Println("Error: Authorization token missing from headers and cookies")
+				return c.JSON(http.StatusUnauthorized, echo.Map{"error": "missing authorization token"})
+			}
+			tokenString = cookie.Value
 		}
-
-		// Split the token from "Bearer <token>"
-		tokenParts := strings.Split(authHeader, " ")
-		if len(tokenParts) != 2 || tokenParts[0] != "Bearer" {
-			log.Println("Error: Invalid Authorization header format")
-			return c.JSON(http.StatusUnauthorized, echo.Map{"error": "invalid authorization header format"})
+		// Ensure "Bearer " is removed if stored in the cookie
+		if strings.HasPrefix(tokenString, "Bearer ") {
+			tokenString = strings.TrimPrefix(tokenString, "Bearer ")
 		}
-
-		tokenString := tokenParts[1]
 
 		// Parse and verify JWT token
 		token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {

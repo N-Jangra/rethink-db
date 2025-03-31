@@ -18,7 +18,6 @@ func UserRoutes(e *echo.Echo) {
 	e.POST("/login", handlers.Login(uc))                                            //login
 	e.GET("/logout", handlers.Logout(uc), middleware.AuthMiddleware)                //logout
 	e.GET("/profile", handlers.GetUser(uc), middleware.AuthMiddleware)              //read user
-	e.GET("/profiles", handlers.GetAllEmailsHandler(uc))                            //read all user
 	e.PUT("/profile/:email", handlers.UpdateUser(uc), middleware.AuthMiddleware)    //update user
 	e.DELETE("/profile/:email", handlers.DeleteUser(uc), middleware.AuthMiddleware) //delete user
 }

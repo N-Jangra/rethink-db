@@ -7,19 +7,18 @@ import (
 	"rethink/api/routes"
 
 	"github.com/labstack/echo/v4"
-	gorethink "github.com/rethinkdb/rethinkdb-go"
 )
 
 func main() {
-	db.InitDB()
+	dbinstance := db.InitDB()
 	db.InitRedis()
 
 	e := echo.New()
 	//e.Static("/", "static")
 	e.Static("/api/web", "./api/web")
 
-	userController := repo.NewUserController(&gorethink.Session{})
-	bookController := repo.NewBookController(&gorethink.Session{})
+	userController := repo.NewUserController(dbinstance)
+	bookController := repo.NewBookController(dbinstance)
 
 	handlers.UserRoute(e, userController)
 	handlers.BooksRoute(e, bookController)

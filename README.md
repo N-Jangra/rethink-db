@@ -35,11 +35,11 @@ Ensure you have the following installed:
    - Create a `config.json` file with the following structure:
      ```json
      {
-    "DB_HOST":"your_database_address",
-    "DB_PORT":"your_database_port",
-    "DB_NAME":"your_database_name",
-    
-    "JWT_SECRET":"******"
+       "DB_HOST":"your_database_address",
+       "DB_PORT":"your_database_port",
+       "DB_NAME":"your_database_name",
+       
+       "JWT_SECRET":"******"
      }
      ```
    - Replace all these with your actual values.

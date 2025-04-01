@@ -33,6 +33,19 @@ func Register(uc *repo.UserController) echo.HandlerFunc {
 		user.Phone = c.FormValue("phone")
 		user.Details = c.FormValue("details")
 
+		// Parse the date of birth (DOB) field
+		dobStr := c.FormValue("dob") // Get dob as a string from the form
+		if dobStr != "" {
+			parsedDob, err := time.Parse("2006-01-02", dobStr) // Expecting YYYY-MM-DD format
+			if err != nil {
+				fmt.Println("Error parsing DOB:", err) // Debugging output
+				return c.JSON(http.StatusBadRequest, map[string]string{"error": "Invalid date format. Use YYYY-MM-DD"})
+			}
+			user.Dob = parsedDob
+		} else {
+			fmt.Println("DOB not provided, skipping...")
+		}
+
 		// Generate a new UUID for Userid
 		user.Userid = uuid.New().String()
 		user.CreatedAt = time.Now()
@@ -90,11 +103,7 @@ func Login(uc *repo.UserController) echo.HandlerFunc {
 			return c.JSON(http.StatusInternalServerError, map[string]string{"error": "failed to update active status"})
 		}
 
-		fmt.Printf("Update result: %+v\n", res) // Print update result
-
-		/*if res.Replaced == 0 {
-			return c.JSON(http.StatusNotFound, map[string]string{"error": "user not found or already active"})
-		}*/
+		fmt.Printf("Update result: %+v\n", res)
 
 		// Generate the JWT token
 		token, err := generateJWT(user)
@@ -138,7 +147,7 @@ func GetUser(uc *repo.UserController) echo.HandlerFunc {
 			if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
 				return nil, fmt.Errorf("unexpected signing method: %v", token.Header["alg"])
 			}
-			return []byte(getJWTSecret()), nil // Replace with your actual secret key
+			return []byte(getJWTSecret()), nil
 		})
 
 		// Check if the token is valid
@@ -189,12 +198,13 @@ func GetUser(uc *repo.UserController) echo.HandlerFunc {
 			"User": map[string]interface{}{
 				"UserID":   userData.Userid,
 				"Name":     userData.Name,
+				"Dob":      userData.Dob.Format("2006-01-02"),
 				"Email":    userData.Email,
 				"Role":     userData.Role,
 				"Gender":   userData.Gender,
 				"Phone":    userData.Phone,
 				"Details":  userData.Details,
-				"JoinedAt": userData.CreatedAt,
+				"JoinedAt": userData.CreatedAt.Format("2006-01-02 15:04:05"),
 			},
 		})
 	}
@@ -227,7 +237,7 @@ func UpdateUser(uc *repo.UserController) echo.HandlerFunc {
 		updatedUser.Gender = c.FormValue("sex")
 		updatedUser.Details = c.FormValue("details")
 		updatedUser.Phone = c.FormValue("phone")
-		updatedUser.Password = db.HashPassword(c.FormValue("password"))
+		updatedUser.Password = c.FormValue("password")
 
 		//field you dont want to change
 		userData.CreatedAt = updatedUser.CreatedAt

@@ -42,7 +42,6 @@ func (uc *UserController) AddUser(user models.AppUser) (models.AppUser, error) {
 		return models.AppUser{}, err
 	}
 
-	fmt.Println("Stored Password (at registration):", user.Password)
 	return user, nil
 }
 
@@ -121,35 +120,6 @@ func (uc *UserController) DeleteUser(Email string) error {
 	return nil
 }
 
-// get all emails
-func (uc *UserController) GetAllEmails() ([]string, error) {
-	// Query to fetch all emails
-	cursor, err := r.DB("taipan").Table("users").Pluck("Email").Run(uc.session)
-	if err != nil {
-		fmt.Println("Error fetching emails:", err)
-		return nil, err
-	}
-	defer cursor.Close() // Ensure cursor is closed
-
-	// Read results into a slice
-	var results []map[string]string
-	if err := cursor.All(&results); err != nil {
-		fmt.Println("Error reading cursor:", err)
-		return nil, err
-	}
-
-	// Extract emails into a slice
-	var emails []string
-	for _, record := range results {
-		if email, ok := record["Email"]; ok {
-			emails = append(emails, email)
-		}
-	}
-
-	fmt.Println("Existing emails in DB:", emails)
-	return emails, nil
-}
-
 // GetUserRoleByEmail fetches the role of a user by email
 func (uc *UserController) GetUserRoleByEmail(Email string) (string, error) {
 
@@ -175,7 +145,7 @@ func (uc *UserController) GetUserRoleByEmail(Email string) (string, error) {
 func (uc *UserController) HasPermission(role, permission string) (bool, error) {
 
 	cursor, err := r.Table("access").
-		Filter(r.Row.Field("role").Eq(role).And(r.Row.Field("privilege").Eq(permission))).
+		Filter(r.Row.Field("Role").Eq(role).And(r.Row.Field("privilege").Eq(permission))).
 		Count().
 		Run(uc.session)
 

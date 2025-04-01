@@ -2,15 +2,19 @@
 
 <form action="/user/update" method="post">
     <input type="text" name="name" id="name" placeholder="Name" required>
-    <input type="email" name="email" id="email" placeholder="Current Email" required> 
     <select name="sex" id="sex" >
         <option value="Male">Male</option>
         <option value="Female">Female</option>
         <option value="Other">Other</option>
     </select>
+    <select name="role" id="role">
+        <option value="User">User</option>
+        <option value="Guest">Guest</option>
+    </select>
     <input type="text" name="details" id="details" placeholder="Details">
     <input type="text" name="phone" id="phone" placeholder="Phone Number">
     <input type="password" name="password" id="password" placeholder="New Password">
+    <input type="email" name="email" id="email" placeholder="Confirm Email For Updation" required> 
     <button type="submit">Update User</button>
 </form>
 

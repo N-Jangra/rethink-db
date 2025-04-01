@@ -89,7 +89,19 @@ func Login(uc *repo.UserController) echo.HandlerFunc {
 		user, err := uc.GetUserByEmail(loginRequest.Email)
 		if err != nil {
 			fmt.Println("User not found in DB:", loginRequest.Email)
-			return c.JSON(http.StatusUnauthorized, map[string]string{"error": "invalid email"})
+			return c.Render(http.StatusOK, "layout.html", map[string]interface{}{
+				"Title": "Login",
+				"Error": "Incorrect Email!!",
+			})
+		}
+
+		// Simple password verification (Direct string check)
+		if user.Password != loginRequest.Password {
+			fmt.Println("Incorrect password for user:", loginRequest.Email)
+			return c.Render(http.StatusOK, "layout.html", map[string]interface{}{
+				"Title": "Login",
+				"Error": "Incorrect Password!!!",
+			})
 		}
 
 		// Set active = true in the database
@@ -227,23 +239,26 @@ func UpdateUser(uc *repo.UserController) echo.HandlerFunc {
 		userData, err := uc.GetUserByEmail(email)
 		if err != nil {
 			fmt.Println("Error fetching user from DB:", err)
-			return c.JSON(http.StatusInternalServerError, echo.Map{"error": "user not found"})
+			return c.Render(http.StatusOK, "layout.html", map[string]interface{}{
+				"Title": "Update User : ",
+				"Error": "No user found for input email!",
+			})
 		}
 
 		// Manually bind form data
 		var updatedUser models.AppUser
 		updatedUser.Name = c.FormValue("name")
-		updatedUser.Email = email
+		updatedUser.Role = c.FormValue("role")
 		updatedUser.Gender = c.FormValue("sex")
 		updatedUser.Details = c.FormValue("details")
 		updatedUser.Phone = c.FormValue("phone")
 		updatedUser.Password = c.FormValue("password")
+		updatedUser.Email = email
 
 		//field you dont want to change
 		userData.CreatedAt = updatedUser.CreatedAt
 		userData.Userid = updatedUser.Userid
 		userData.Dob = updatedUser.Dob
-		userData.Role = updatedUser.Role
 
 		//changable fields
 		updatedUser.UpdatedAt = time.Now()
@@ -271,14 +286,20 @@ func DeleteUser(uc *repo.UserController) echo.HandlerFunc {
 
 		if email == "" {
 			fmt.Println("Error: Email is missing in form submission")
-			return c.JSON(http.StatusBadRequest, map[string]string{"error": "missing user ID"})
+			return c.Render(http.StatusOK, "layout.html", map[string]interface{}{
+				"Title": "Delete User : ",
+				"Error": "Email cannot be empty.",
+			})
 		}
 
 		// delete user from db
 		err := uc.DeleteUser(email)
 		if err != nil {
 			fmt.Println("Error deleting user:", err)
-			return c.JSON(http.StatusInternalServerError, map[string]string{"error": err.Error()})
+			return c.Render(http.StatusOK, "layout.html", map[string]interface{}{
+				"Title": "Delete User : ",
+				"Error": "No user with this email found.",
+			})
 		}
 
 		return c.Redirect(http.StatusSeeOther, "/login")

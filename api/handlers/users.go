@@ -95,8 +95,8 @@ func Login(uc *repo.UserController) echo.HandlerFunc {
 			})
 		}
 
-		// Simple password verification (Direct string check)
-		if user.Password != loginRequest.Password {
+		// Compare the provided password with the stored hashed password
+		if !db.CheckHashedPassword(loginRequest.Password, user.Password) {
 			fmt.Println("Incorrect password for user:", loginRequest.Email)
 			return c.Render(http.StatusOK, "layout.html", map[string]interface{}{
 				"Title": "Login",
@@ -252,7 +252,7 @@ func UpdateUser(uc *repo.UserController) echo.HandlerFunc {
 		updatedUser.Gender = c.FormValue("sex")
 		updatedUser.Details = c.FormValue("details")
 		updatedUser.Phone = c.FormValue("phone")
-		updatedUser.Password = c.FormValue("password")
+		updatedUser.Password = db.HashPassword(c.FormValue("password"))
 		updatedUser.Email = email
 
 		//field you dont want to change
@@ -351,7 +351,7 @@ func Logout(uc *repo.UserController) echo.HandlerFunc {
 			return c.JSON(http.StatusUnauthorized, map[string]string{"error": "invalid email"})
 		}
 
-		// Set active = true in the database
+		// Set active = false in the database
 		res, err := r.Table("users").
 			Filter(r.Row.Field("Email").Eq(user.Email)).
 			Update(map[string]interface{}{"Active": false}).

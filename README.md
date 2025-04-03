@@ -67,7 +67,6 @@ The server will start on port `8090`.
 
 ### Users
 
-- `GET /api/users` - List users
 - `GET /api/users/:id` - Get user details
 - `PUT /api/users/:id` - Update user
 - `DELETE /api/users/:id` - Delete user

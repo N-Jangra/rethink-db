@@ -122,6 +122,7 @@ rethinkdb/
 │── main.go                   # Application entry point
 │── go.mod                    # Go module dependencies
 │── go.sum                    # Dependency checksums
+│── seed.txt                  # RethinkDB insertions for roles
 │── rethinkdb_data/           # RethinkDB storage
 ```
 

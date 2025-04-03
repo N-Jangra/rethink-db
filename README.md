@@ -90,17 +90,39 @@ curl -X POST http://localhost:8090/api/login -d '{"username": "test", "password"
 ## Project Structure
 
 ```
-rethinkdb.v3/
+rethinkdb/
 │── api/
-│   ├── db/           # Database connection
-│   ├── handlers/     # Request handlers
-│   ├── repo/         # Repository layer
-│   ├── routes/       # API route definitions
-│── config.json       # Configuration file
-│── main.go           # Application entry point
-│── go.mod            # Go module dependencies
-│── go.sum            # Dependency checksums
-│── rethinkdb_data/   # RethinkDB storage
+│   ├── db/                   # Database connection
+│   │   ├── db.go                            
+│   │   └── pass.go                         
+│   ├── handlers/             # Request handlers
+│   │   ├── books.go              
+│   │   ├── jwt.go                
+│   │   ├── root.go               
+│   │   ├── users.go              
+│   │   └── web.go               
+│   ├── middleware/                                  # 
+│   │   ├── auth.go                           
+│   │   └── books.go          
+│   ├── models/               # Request handlers
+│   │   ├── access.go                 
+│   │   ├── appusers.go                
+│   │   ├── books.go                
+│   │   ├── privileges.go                  
+│   │   └── roles.go          
+│   ├── repo/                 # Repository layer
+│   │   ├── books.go                           
+│   │   └── users.go          
+│   ├── routes/               # API route definitions
+│   │   ├── books.go                          
+│   │   └── users.go          
+│   ├── web/                  # API route definitions
+│   │   └── frontend files    # (templates, html, css)          
+│── config.json               # Configuration file
+│── main.go                   # Application entry point
+│── go.mod                    # Go module dependencies
+│── go.sum                    # Dependency checksums
+│── rethinkdb_data/           # RethinkDB storage
 ```
 
 ## License

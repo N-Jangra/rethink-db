@@ -34,7 +34,8 @@ func (uc *UserController) AddUser(user models.AppUser) (models.AppUser, error) {
 	defer cursor.Close()
 
 	// Hash the password before saving
-	user.Password = (user.Password)
+	hashedPassword := db.HashPassword(user.Password)
+	user.Password = hashedPassword
 
 	// Save user
 	_, err = r.Table("users").Insert(user).RunWrite(uc.session)

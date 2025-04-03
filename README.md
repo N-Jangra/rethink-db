@@ -101,7 +101,7 @@ rethinkdb/
 │   │   ├── root.go               
 │   │   ├── users.go              
 │   │   └── web.go               
-│   ├── middleware/                                  # 
+│   ├── middleware/           # Middlewares for authentication 
 │   │   ├── auth.go                           
 │   │   └── books.go          
 │   ├── models/               # Request handlers

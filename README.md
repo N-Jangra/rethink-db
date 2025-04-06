@@ -24,7 +24,7 @@ Ensure you have the following installed:
 
 1. Clone the repository:
    ```sh
-   [git clone https://github.com/N-Jangra/rethink-db.git
+   git clone https://github.com/N-Jangra/rethink-db.git
    cd rethink-db
    ```
 2. Install dependencies:

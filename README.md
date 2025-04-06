@@ -29,6 +29,7 @@ Ensure you have the following installed:
    ```
 2. Install dependencies:
    ```sh
+   go mod init rethink
    go mod tidy
    ```
 3. Configure the application:

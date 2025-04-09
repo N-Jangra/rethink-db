@@ -1,0 +1,8 @@
+# RethinkDB API Server - Go Project Dependencies
+
+github.com/labstack/echo/v4                 # Web framework for building RESTful APIs
+github.com/rethinkdb/rethinkdb-go           # RethinkDB Go driver for database connectivity
+github.com/go-redis/redis/v8                # Redis client for Go, used for session management
+github.com/golang-jwt/jwt/v4                # JWT library for token creation and verification
+golang.org/x/crypto/bcrypt                  # Secure password hashing with bcrypt
+github.com/joho/godotenv                    # Load environment variables from .env files 
